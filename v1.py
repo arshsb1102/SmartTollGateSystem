@@ -231,7 +231,8 @@ def draw_dashboard(canvas, cam_w):
     put(f"Rejected: {stats['rejected']}", (0,0,255))
     put(f"Manual Approved: {stats['manual_approved']}", (255,255,0))
     y += 10
-    put("ENTER=Process | M=Manual | 1/2/3=Camera | Q=Quit", (180,180,180))
+    put("ENTER=Process | M=Manual | R=Re-Scan", (180,180,180))
+    put("1/2/3=Camera | Q=Quit", (180,180,180))
 
 # ----------------------------
 # CAMERA SWITCHING
@@ -436,6 +437,20 @@ while True:
         switch_camera(2)
     elif key == ord('q'):
         break
+    elif key == ord('r'):
+        dashboard.update({
+            "plate": "-",
+            "status": "Waiting for vehicle",
+            "gate": "CLOSED",
+            "payment": "-",
+            "cash": "NO"
+        })
+        current_decision = None
+        last_processed_plate = None
+        last_manual_plate = None
+        pending_plate = None
+        processing_in_progress = False
+        reset_at = None
 
 cap.release()
 cv2.destroyAllWindows()
