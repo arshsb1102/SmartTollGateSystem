@@ -292,7 +292,7 @@ while True:
     canvas = np.zeros((h, w + DASHBOARD_WIDTH, 3), dtype=np.uint8)
     canvas[:, :w] = frame
 
-    x1, y1 = int(w*0.25), int(h*0.35)
+    x1, y1 = int(w*0.25), int(h*0.45)
     x2, y2 = int(w*0.75), int(h*0.65)
 
     if not processing_in_progress:
