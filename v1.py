@@ -409,22 +409,35 @@ while True:
 
     # ENTER
     if key == 13 and pending_plate:
-        dashboard["status"] = "ANALYSING VEHICLE RECORDS ..."
-        # Display analysis banner
-        analysis_canvas = canvas.copy()
-        cv2.rectangle(analysis_canvas, (0, 0), (w, 70), (0, 0, 0), -1)
-        cv2.putText(
-            analysis_canvas,
-            "ANALYSING VEHICLE RECORDS",
-            (int(w * 0.15), 45),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.9,
-            (0, 255, 255),
-            3
-        )
-        cv2.imshow("Smart Toll Gate", analysis_canvas)
-        cv2.waitKey(1)
-        time.sleep(2)
+        # Sequential database scanning with status updates
+        scan_messages = [
+            "Scanning Valid Licenses...",
+            "Scanning Criminal Records...",
+            "Scanning Traffic Violations...",
+            "Scanning Insurance Status...",
+            "Scanning PUC Records...",
+            "Scanning Accident Records..."
+        ]
+        
+        scan_duration = 3.5  # Total 3.5 seconds for all scans (0.5s per scan)
+        time_per_scan = scan_duration / len(scan_messages)
+        
+        for i, scan_msg in enumerate(scan_messages, 1):
+            # Display scanning banner with progress
+            scan_canvas = canvas.copy()
+            cv2.rectangle(scan_canvas, (0, 0), (w, 70), (0, 0, 0), -1)
+            cv2.putText(
+                scan_canvas,
+                f"{scan_msg} ({i}/{len(scan_messages)})",
+                (int(w * 0.12), 45),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.9,
+                (0, 255, 255),
+                3
+            )
+            cv2.imshow("Smart Toll Gate", scan_canvas)
+            cv2.waitKey(1)
+            time.sleep(time_per_scan)
         
         stats["total"] += 1
         dashboard["status"] = check_vehicle(pending_plate)
@@ -439,7 +452,7 @@ while True:
             play_sound("approved")
             reset_at = time.time() + RESET_DELAY_APPROVED
         else:
-            dashboard["payment"] = "Press 'M' for manual processing"
+            dashboard["payment"] = "Press 'M' for manual"
             dashboard["gate"] = "CLOSED"
             stats["rejected"] += 1
             play_sound("rejected")
