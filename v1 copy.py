@@ -109,7 +109,6 @@ pending_plate = None
 processing_in_progress = False
 current_decision = None
 frozen_frame = None
-rejection_banner_at = None
 
 # ----------------------------
 # RESET TIMERS (ONLY CHANGE)
@@ -211,12 +210,7 @@ def draw_dashboard(canvas, cam_w):
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, c, 2)
         y += 32
 
-    put("SMART TOLL GATE MANAGEMENT SYSTEM", (0,255,255))
-    put("-------------", (0,255,255))
-    put("Anvit Anita Anand", (180,180,180))
-    put("OLPS High School", (180,180,180))
-    put("Class 3 C , Roll No 1", (180,180,180))
-    put("-------------", (0,255,255))
+    put("SMART TOLL GATE", (0,255,255))
     put(f"Plate: {dashboard['plate']}")
 
     status_color = (0,255,0) if "APPROVED" in dashboard["status"] else (0,0,255)
@@ -286,8 +280,6 @@ while True:
         current_decision = None
         last_processed_plate = None
         last_manual_plate = None
-        processing_in_progress = False
-        frozen_frame = None
         reset_at = None
 
     if not processing_in_progress:
@@ -337,20 +329,6 @@ while True:
             cv2.FONT_HERSHEY_SIMPLEX,
             0.9,
             (0, 255, 0),
-            3
-        )
-
-    elif rejection_banner_at and time.time() < rejection_banner_at:
-        # Rejection banner with manual processing option and countdown timer
-        remaining_time = int(rejection_banner_at - time.time())
-        cv2.rectangle(canvas, (0, 0), (w, 70), (0, 0, 0), -1)
-        cv2.putText(
-            canvas,
-            f"VEHICLE REJECTED - Press 'M' for manual processing ({remaining_time}s)",
-            (int(w * 0.05), 45),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.85,
-            (0, 0, 255),
             3
         )
 
@@ -410,19 +388,8 @@ while True:
     # ENTER
     if key == 13 and pending_plate:
         dashboard["status"] = "ANALYSING VEHICLE RECORDS ..."
-        # Display analysis banner
-        analysis_canvas = canvas.copy()
-        cv2.rectangle(analysis_canvas, (0, 0), (w, 70), (0, 0, 0), -1)
-        cv2.putText(
-            analysis_canvas,
-            "ANALYSING VEHICLE RECORDS",
-            (int(w * 0.15), 45),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.9,
-            (0, 255, 255),
-            3
-        )
-        cv2.imshow("Smart Toll Gate", analysis_canvas)
+        draw_dashboard(canvas, w)
+        cv2.imshow("Smart Toll Gate", canvas)
         cv2.waitKey(1)
         time.sleep(2)
         
@@ -439,16 +406,15 @@ while True:
             play_sound("approved")
             reset_at = time.time() + RESET_DELAY_APPROVED
         else:
-            dashboard["payment"] = "Press 'M' for manual processing"
+            dashboard["payment"] = "Payment failed"
             dashboard["gate"] = "CLOSED"
             stats["rejected"] += 1
             play_sound("rejected")
-            rejection_banner_at = time.time() + RESET_DELAY_REJECTED
             reset_at = time.time() + RESET_DELAY_REJECTED
-            processing_in_progress = True
 
         last_processed_plate = pending_plate
         pending_plate = None
+        processing_in_progress = False
 
     # MANUAL
     elif key == ord('m') and dashboard["gate"] == "CLOSED" and dashboard["status"].startswith("REJECTED") and last_manual_plate != dashboard["plate"]:
@@ -459,8 +425,6 @@ while True:
         stats["manual_approved"] += 1
         total_cash += 50
         play_sound("approved")
-        rejection_banner_at = None
-        processing_in_progress = False
 
         last_manual_plate = dashboard["plate"]
         reset_at = time.time() + RESET_DELAY_APPROVED
@@ -486,7 +450,6 @@ while True:
         last_manual_plate = None
         pending_plate = None
         processing_in_progress = False
-        rejection_banner_at = None
         reset_at = None
 
 cap.release()
