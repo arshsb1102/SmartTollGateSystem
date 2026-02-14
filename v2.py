@@ -213,9 +213,9 @@ def draw_dashboard(canvas, cam_w):
 
     put("SMART TOLL GATE MANAGEMENT SYSTEM", (0,255,255))
     put("-------------", (0,255,255))
-    put("Anvit Anita Anand", (200,200,200))
-    put("OLPS High School", (200,200,200))
-    put("Class 3 C , Roll No 1", (200,200,200))
+    put("Anvit Anita Anand", (180,180,180))
+    put("OLPS High School", (180,180,180))
+    put("Class 3 C , Roll No 1", (180,180,180))
     put("-------------", (0,255,255))
     put(f"Plate: {dashboard['plate']}")
 
@@ -237,8 +237,8 @@ def draw_dashboard(canvas, cam_w):
     put(f"Rejected: {stats['rejected']}", (0,0,255))
     put(f"Manual Approved: {stats['manual_approved']}", (255,255,0))
     y += 10
-    put("ENTER=Process | M=Manual | R=Re-Scan", (200,200,200))
-    put("1/2/3=Camera | Q=Quit", (200,200,200))
+    put("ENTER=Process | M=Manual | R=Re-Scan", (180,180,180))
+    put("1/2/3=Camera | Q=Quit", (180,180,180))
 
 # ----------------------------
 # CAMERA SWITCHING
