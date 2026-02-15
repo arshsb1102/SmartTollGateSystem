@@ -212,11 +212,7 @@ def draw_dashboard(canvas, cam_w):
         y += 32
 
     put("SMART TOLL GATE MANAGEMENT SYSTEM", (0,255,255))
-    put("-------------", (0,255,255))
-    put("Anvit Anita Anand", (200,200,200))
-    put("OLPS High School", (200,200,200))
-    put("Class 3 C , Roll No 1", (200,200,200))
-    put("-------------", (0,255,255))
+    put("Anvit Anita Anand | Class 3 C | Roll No 1", (200,200,200))
     put(f"Plate: {dashboard['plate']}")
 
     status_color = (0,255,0) if "APPROVED" in dashboard["status"] else (0,0,255)
@@ -346,7 +342,7 @@ while True:
         cv2.rectangle(canvas, (0, 0), (w, 70), (0, 0, 0), -1)
         cv2.putText(
             canvas,
-            f"VEHICLE REJECTED - Press 'M' for manual processing ({remaining_time}s)",
+            f"REJECTED - 'M' - Manual Process ({remaining_time}s)",
             (int(w * 0.05), 45),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.85,
