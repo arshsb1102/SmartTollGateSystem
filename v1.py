@@ -211,8 +211,16 @@ def draw_dashboard(canvas, cam_w):
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, c, 2)
         y += 32
 
-    put("SMART TOLL GATE MANAGEMENT SYSTEM", (0,255,255))
-    put("Anvit Anita Anand | Class 3 C | Roll No 1", (200,200,200))
+    title_text = "SMART TOLL GATE MANAGEMENT SYSTEM"
+    (text_w, text_h), baseline = cv2.getTextSize(title_text, cv2.FONT_HERSHEY_SIMPLEX, 0.85, 2)
+    box_y_top = y - text_h - 8
+    box_y_bottom = y + baseline + 3
+    cv2.rectangle(canvas, (x - 5, box_y_top), (x + text_w + 5, box_y_bottom), (0,255,255), 2)
+    cv2.putText(canvas, title_text, (x, y),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.85, (0,255,255), 2)
+    y += 38
+
+    put("Anvit Anand | Class 3 C | Roll No 1", (200,200,200))
     put(f"Plate: {dashboard['plate']}")
 
     status_color = (0,255,0) if "APPROVED" in dashboard["status"] else (0,0,255)
@@ -235,6 +243,10 @@ def draw_dashboard(canvas, cam_w):
     y += 10
     put("ENTER=Process | M=Manual | R=Re-Scan", (200,200,200))
     put("1/2/3=Camera | Q=Quit", (200,200,200))
+    bottom_y = canvas.shape[0] - 20
+    cv2.putText(canvas, "Feb/Mar 2026", (cam_w + DASHBOARD_WIDTH - 300, bottom_y),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.65, (100,100,100), 1)
+
 
 # ----------------------------
 # CAMERA SWITCHING
@@ -399,7 +411,7 @@ while True:
     )
 
     draw_dashboard(canvas, w)
-    cv2.imshow("Smart Toll Gate", canvas)
+    cv2.imshow("Smart Toll Gate Management System", canvas)
 
     key = cv2.waitKey(1) & 0xFF
 
