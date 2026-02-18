@@ -443,7 +443,7 @@ while True:
                 (0, 255, 255),
                 3
             )
-            cv2.imshow("Smart Toll Gate", scan_canvas)
+            cv2.imshow("Smart Toll Gate Management System", scan_canvas)
             cv2.waitKey(1)
             time.sleep(time_per_scan)
         
